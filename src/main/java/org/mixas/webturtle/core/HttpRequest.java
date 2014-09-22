@@ -16,11 +16,11 @@ public class HttpRequest {
     private String protocolVersion;
     private Map<String, String>  headers;
     private Cookie[] cookies;
-    private String resource;
+    private String uri;
 
-    public HttpRequest(HttpRequestMethod method, String resource, String protocolVersion, Map<String, String> headers) {
+    public HttpRequest(HttpRequestMethod method, String uri, String protocolVersion, Map<String, String> headers) {
         this.method = method;
-        this.resource = resource;
+        this.uri = uri;
         this.protocolVersion = protocolVersion;
         this.headers = headers;
         initCookies();
