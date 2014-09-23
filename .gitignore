@@ -27,12 +27,3 @@ target
 logs
 build
 
-/jcommune-view/jcommune-web-controller/test-output
-/jcommune-model/test-output
-/jcommune-service/test-output
-/jcommune-view/jcommune-web-view/test-output
-/jcommune-view/jcommune-web-controller/bin
-/jcommune-view/jcommune-web-view/bin
-/jcommune-view/jcommune-web-view/src/main/webapp/resources/wro
-/jcommune-service/bin
-/jcommune-model/bin
