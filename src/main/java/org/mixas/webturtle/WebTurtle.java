@@ -1,5 +1,7 @@
 package org.mixas.webturtle;
 
+import org.mixas.webturtle.configuration.Configurer;
+import org.mixas.webturtle.configuration.MissingPropertyException;
 import org.mixas.webturtle.net.Server;
 
 import java.io.IOException;
@@ -15,8 +17,16 @@ public class WebTurtle {
     public static final String STOP_WORD = "stop";
 
     public static void main(String[] args) {
-        System.out.println("Application startup...");
+        System.out.println("Application configuration ...");
+        Configurer.getInstance();
+        System.out.println("Success !");
+        System.out.println("Application startup ...");
         final Server server = new Server();
+        try {
+            server.setPort(Configurer.getInstance().getIntProperty("port"));
+        } catch (MissingPropertyException e) {
+            System.out.println("Property with name \"port\" can't be found. Default port will be used");
+        }
         Thread serverThread = new Thread(new Runnable() {
             @Override
             public void run() {

@@ -40,4 +40,7 @@ public class Server {
         SocketPool.getInstance().clearPool();
     }
 
+    public void setPort(int port) {
+        this.port = port;
+    }
 }
