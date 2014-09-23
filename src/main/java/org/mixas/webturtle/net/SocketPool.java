@@ -36,6 +36,10 @@ public class SocketPool {
         pool.remove(socket);
     }
 
+    public int getCurrentSize() {
+        return pool.size();
+    }
+
     /**
      * Disconnects all sockets and removes from pool
      */

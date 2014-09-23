@@ -40,6 +40,10 @@ public class Server {
         SocketPool.getInstance().clearPool();
     }
 
+    public boolean isStopped() {
+        return serverSocket.isClosed();
+    }
+
     public void setPort(int port) {
         this.port = port;
     }
