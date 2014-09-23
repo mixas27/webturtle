@@ -36,7 +36,7 @@ public class SocketPool {
         pool.remove(socket);
     }
 
-    public int getCurrentSize() {
+    public synchronized int getCurrentSize() {
         return pool.size();
     }
 
