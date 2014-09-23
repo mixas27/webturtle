@@ -31,4 +31,8 @@ public enum HttpResponseStatus {
     public int getCode() {
         return code;
     }
+
+    public boolean isError() {
+        return code < 400;
+    }
 }
