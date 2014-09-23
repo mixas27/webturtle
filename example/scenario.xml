@@ -1,0 +1,10 @@
+<application>
+  <mappings>
+    <mapping>
+      <url>\example</url>
+      <method>GET</method>
+      <response>Get method for url \example</response>
+      <entries>4</entries>
+    </mapping>
+  </mappings>
+</application>
