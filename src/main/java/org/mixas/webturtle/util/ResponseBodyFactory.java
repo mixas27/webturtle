@@ -1,7 +1,7 @@
 package org.mixas.webturtle.util;
 
 import org.apache.log4j.Logger;
-import org.mixas.webturtle.core.http.HttpResponseStatus;
+import org.mixas.webturtle.core.http.response.HttpResponseStatus;
 
 import java.io.BufferedReader;
 import java.io.IOException;

@@ -1,7 +1,7 @@
 <application>
 <mappings>
   <mapping>
-    <url>\example</url>
+    <url>/example</url>
     <method>GET</method>
     <response>
       <type>STRING</type>

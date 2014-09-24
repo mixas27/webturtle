@@ -1,4 +1,4 @@
-package org.mixas.webturtle.core.http;
+package org.mixas.webturtle.core.http.response;
 
 import org.mixas.webturtle.util.ResponseBodyFactory;
 

@@ -1,4 +1,4 @@
-package org.mixas.webturtle.core.http;
+package org.mixas.webturtle.core.http.response;
 
 /**
  * Now it is most common used response codes. Will be supplemented in future if will necessary.

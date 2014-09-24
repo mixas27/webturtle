@@ -1,10 +1,10 @@
 package org.mixas.webturtle.net;
 
 import org.apache.log4j.Logger;
-import org.mixas.webturtle.core.http.HttpRequest;
-import org.mixas.webturtle.core.http.HttpRequestMethod;
-import org.mixas.webturtle.core.http.HttpResponse;
-import org.mixas.webturtle.core.http.HttpResponseStatus;
+import org.mixas.webturtle.core.http.request.HttpRequest;
+import org.mixas.webturtle.core.http.request.HttpRequestMethod;
+import org.mixas.webturtle.core.http.response.HttpResponse;
+import org.mixas.webturtle.core.http.response.HttpResponseStatus;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;

@@ -1,13 +1,14 @@
-package org.mixas.webturtle.core.http;
+package org.mixas.webturtle.core.http.request;
 
 import javax.servlet.http.Cookie;
+import java.util.Collections;
 import java.util.Map;
 
 /**
  * @author Mikhail Stryzhonok
  */
 public class HttpRequest {
-
+    private static final String DEFAULT_PROTOCOL_VERSION = "HTTP/1.1";
     public static final String COOKIE_HEADER = "Cookie";
     private static final String COOKIE_SEPARATOR = ";";
     private static final String COOKIE_PAIR_SEPARATOR = "=";
@@ -16,11 +17,15 @@ public class HttpRequest {
     private String protocolVersion;
     private Map<String, String>  headers;
     private Cookie[] cookies;
-    private String uri;
+    private String url;
 
-    public HttpRequest(HttpRequestMethod method, String uri, String protocolVersion, Map<String, String> headers) {
+    public HttpRequest(HttpRequestMethod method, String url) {
+        this(method, url, DEFAULT_PROTOCOL_VERSION, Collections.<String, String>emptyMap());
+    }
+
+    public HttpRequest(HttpRequestMethod method, String url, String protocolVersion, Map<String, String> headers) {
         this.method = method;
-        this.uri = uri;
+        this.url = url;
         this.protocolVersion = protocolVersion;
         this.headers = headers;
         initCookies();
@@ -63,5 +68,25 @@ public class HttpRequest {
 
     public String getProtocolVersion() {
         return protocolVersion;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        HttpRequest that = (HttpRequest) o;
+
+        if (method != that.method) return false;
+        if (!url.equals(that.url)) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = method.hashCode();
+        result = 31 * result + url.hashCode();
+        return result;
     }
 }
