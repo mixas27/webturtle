@@ -1,5 +1,8 @@
 package org.mixas.webturtle.core
 
+import org.mixas.webturtle.core.http.HttpRequest
+import org.mixas.webturtle.core.http.HttpRequestMethod
+
 /**
  * @author Mikhail Stryzhonok
  */

@@ -1,4 +1,6 @@
-package org.mixas.webturtle.core;
+package org.mixas.webturtle.core.http;
+
+import org.mixas.webturtle.util.ResponseBodyFactory;
 
 import javax.servlet.http.Cookie;
 import java.util.Date;
@@ -9,7 +11,7 @@ import java.util.Map;
  * @author Mikhail Stryzhonok
  */
 public class HttpResponse {
-
+    private static final String DEFAULT_PROTOCOL = "HTTP/1.1";
     private String body;
     private final Map<String, String> generalHeaders = new HashMap<>();
     private final Map<String, String> responseHeaders = new HashMap<>();
@@ -17,13 +19,25 @@ public class HttpResponse {
     private HttpResponseStatus status;
     private String protocol;
 
-    public HttpResponse(String protocol, HttpResponseStatus errorStatus) {
+    public HttpResponse(HttpResponseStatus errorStatus) {
         if (!errorStatus.isError()) {
             throw new IllegalArgumentException();
         }
+        protocol = DEFAULT_PROTOCOL;
         this.status = errorStatus;
         initGeneralHeaders();
         newCookies = new Cookie[0];
+        body = ResponseBodyFactory.getInternalResourceResponseBody(status);
+    }
+
+
+    public HttpResponse(String protocol, HttpResponseStatus status, Map<String, String> headers) {
+        this.status = status;
+        this.protocol = protocol;
+        initGeneralHeaders();
+        responseHeaders.putAll(headers);
+        newCookies = new Cookie[0];
+        this.body = ResponseBodyFactory.getInternalResourceResponseBody(status);
     }
 
     private void initGeneralHeaders() {

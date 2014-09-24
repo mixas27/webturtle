@@ -1,12 +1,16 @@
 package org.mixas.webturtle.net;
 
-import org.mixas.webturtle.core.HttpRequest;
-import org.mixas.webturtle.core.HttpRequestMethod;
-import org.mixas.webturtle.core.HttpResponse;
+import org.apache.log4j.Logger;
+import org.mixas.webturtle.core.http.HttpRequest;
+import org.mixas.webturtle.core.http.HttpRequestMethod;
+import org.mixas.webturtle.core.http.HttpResponse;
+import org.mixas.webturtle.core.http.HttpResponseStatus;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.net.Socket;
 import java.util.Collections;
 import java.util.HashMap;
@@ -16,6 +20,7 @@ import java.util.Map;
  * @author Mikhail Stryzhonok
  */
 public class ConnectionHandler implements Runnable {
+    private static final Logger LOGGER = Logger.getLogger(ConnectionHandler.class);
     private final Socket socket;
 
     public ConnectionHandler(Socket socket) {
@@ -24,11 +29,31 @@ public class ConnectionHandler implements Runnable {
 
     @Override
     public void run() {
-
+        HttpRequest request = null;
         try {
-            HttpRequest request = prepareRequest();
+            request = prepareRequest();
         } catch (IOException e) {
-
+            LOGGER.debug("Error receiving request", e);
+            try {
+                sendResponse(new HttpResponse(HttpResponseStatus.BAD_REQUEST));
+            } catch (IOException ex) {
+                LOGGER.error("Can't send error response", ex);
+            }
+        }
+        try {
+            if (request == null) {
+                sendResponse(new HttpResponse(HttpResponseStatus.BAD_REQUEST));
+            } else {
+                sendResponse(new HttpResponse(request.getProtocolVersion(), HttpResponseStatus.OK,
+                        Collections.<String, String>emptyMap()));
+            }
+        } catch (IOException e) {
+            LOGGER.error("Error sending good response ", e);
+            try {
+                sendResponse(new HttpResponse(HttpResponseStatus.INTERNAL_SERVER_ERROR));
+            } catch (IOException ex) {
+                LOGGER.error("Error sending internal server error", ex);
+            }
         }
     }
 
@@ -59,8 +84,11 @@ public class ConnectionHandler implements Runnable {
                 requestLineEntries[2].trim(), headers);
     }
 
-    protected void sendResponse(HttpResponse response) {
-
+    protected void sendResponse(HttpResponse response) throws IOException{
+        BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
+        writer.write(response.getSendableForm());
+        writer.flush();
+        writer.close();
     }
 
 }

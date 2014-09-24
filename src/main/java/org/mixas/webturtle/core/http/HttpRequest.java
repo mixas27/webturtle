@@ -1,4 +1,4 @@
-package org.mixas.webturtle.core;
+package org.mixas.webturtle.core.http;
 
 import javax.servlet.http.Cookie;
 import java.util.Map;
@@ -61,4 +61,7 @@ public class HttpRequest {
         return cookies;
     }
 
+    public String getProtocolVersion() {
+        return protocolVersion;
+    }
 }

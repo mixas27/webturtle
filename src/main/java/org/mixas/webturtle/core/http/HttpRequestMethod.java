@@ -1,4 +1,4 @@
-package org.mixas.webturtle.core;
+package org.mixas.webturtle.core.http;
 
 /**
  * @author Mikhail Stryzhonok
