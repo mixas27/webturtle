@@ -1,10 +1,13 @@
 <application>
-  <mappings>
-    <mapping>
-      <url>\example</url>
-      <method>GET</method>
-      <response>Get method for url \example</response>
-      <entries>4</entries>
-    </mapping>
-  </mappings>
+<mappings>
+  <mapping>
+    <url>\example</url>
+    <method>GET</method>
+    <response>
+      <type>STRING</type>
+      <value>HELLO</value>
+    </response>
+    <entries>4</entries>
+  </mapping>
+</mappings>
 </application>

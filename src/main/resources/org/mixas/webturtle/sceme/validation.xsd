@@ -10,9 +10,37 @@
                 <xs:complexType>
                   <xs:sequence>
                     <xs:element name="url" type="xs:string"/>
-                    <xs:element name="method" type="xs:string"/>
-                    <xs:element name="response" type="xs:string"/>
-                    <xs:element name="entries" type="xs:int"/>
+                    <xs:element name="method">
+                      <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                          <xs:enumeration value="OPTIONS"/>
+                          <xs:enumeration value="GET"/>
+                          <xs:enumeration value="HEAD"/>
+                          <xs:enumeration value="POST"/>
+                          <xs:enumeration value="PUT"/>
+                          <xs:enumeration value="DELETE"/>
+                          <xs:enumeration value="TRACE"/>
+                          <xs:enumeration value="CONNECT"/>
+                          <xs:enumeration value="PATH"/>
+                        </xs:restriction>
+                      </xs:simpleType>
+                    </xs:element>
+                    <xs:element name="response" minOccurs="0">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:element name="type">
+                            <xs:simpleType>
+                              <xs:restriction base="xs:string">
+                                <xs:enumeration value="STRING"/>
+                                <xs:enumeration value="FILE"/>
+                              </xs:restriction>
+                            </xs:simpleType>
+                          </xs:element>
+                          <xs:element name="value" type="xs:string"/>
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+                    <xs:element name="entries" type="xs:int" minOccurs="0"/>
                   </xs:sequence>
                 </xs:complexType>
               </xs:element>

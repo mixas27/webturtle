@@ -18,7 +18,6 @@ public class WebTurtle {
 
     public static void main(String[] args) {
         System.out.println("Application configuration ...");
-        Configurer.getInstance();
         System.out.println("Success !");
         System.out.println("Application startup ...");
         final Server server = new Server();
