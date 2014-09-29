@@ -28,6 +28,12 @@ public class HttpResponse {
         source = new StatusResponseBodySource(status);
     }
 
+    public HttpResponse() {
+        status = HttpResponseStatus.OK;
+        initGeneralHeaders();
+        newCookies = new Cookie[0];
+        this.protocol = DEFAULT_PROTOCOL;
+    }
 
     public HttpResponse(String protocol, HttpResponseStatus status, Map<String, String> headers) {
         this(protocol, status, headers, new StatusResponseBodySource(status));
@@ -74,4 +80,7 @@ public class HttpResponse {
         return sendable.toString();
     }
 
+    public void setSource(ResponseBodySource source) {
+        this.source = source;
+    }
 }

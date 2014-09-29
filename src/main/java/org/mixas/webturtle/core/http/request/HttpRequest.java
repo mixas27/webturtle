@@ -19,8 +19,10 @@ public class HttpRequest {
     private Cookie[] cookies;
     private String url;
 
-    public HttpRequest(HttpRequestMethod method, String url) {
-        this(method, url, DEFAULT_PROTOCOL_VERSION, Collections.<String, String>emptyMap());
+    public HttpRequest() {
+        protocolVersion = DEFAULT_PROTOCOL_VERSION;
+        headers = Collections.<String, String>emptyMap();
+        cookies = new Cookie[0];
     }
 
     public HttpRequest(HttpRequestMethod method, String url, String protocolVersion, Map<String, String> headers) {
@@ -88,5 +90,13 @@ public class HttpRequest {
         int result = method.hashCode();
         result = 31 * result + url.hashCode();
         return result;
+    }
+
+    public void setMethod(HttpRequestMethod method) {
+        this.method = method;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
     }
 }

@@ -4,8 +4,10 @@
     <url>/example</url>
     <method>GET</method>
     <response>
-      <type>STRING</type>
-      <value>HELLO</value>
+      <source>
+        <type>STRING</type>
+        <value>HELLO</value>
+      </source>
     </response>
     <entries>4</entries>
   </mapping>
