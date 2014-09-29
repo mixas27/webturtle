@@ -1,7 +1,5 @@
 package org.mixas.webturtle.core.http.response;
 
-import org.mixas.webturtle.util.ResponseBodyFactory;
-
 import javax.servlet.http.Cookie;
 import java.util.Date;
 import java.util.HashMap;
@@ -12,7 +10,7 @@ import java.util.Map;
  */
 public class HttpResponse {
     private static final String DEFAULT_PROTOCOL = "HTTP/1.1";
-    private String body;
+    private ResponseBodySource source;
     private final Map<String, String> generalHeaders = new HashMap<>();
     private final Map<String, String> responseHeaders = new HashMap<>();
     private Cookie[] newCookies;
@@ -27,17 +25,21 @@ public class HttpResponse {
         this.status = errorStatus;
         initGeneralHeaders();
         newCookies = new Cookie[0];
-        body = ResponseBodyFactory.getInternalResourceResponseBody(status);
+        source = new StatusResponseBodySource(status);
     }
 
 
     public HttpResponse(String protocol, HttpResponseStatus status, Map<String, String> headers) {
+        this(protocol, status, headers, new StatusResponseBodySource(status));
+    }
+
+    public HttpResponse(String protocol, HttpResponseStatus status, Map<String, String> headers, ResponseBodySource source) {
         this.status = status;
         this.protocol = protocol;
         initGeneralHeaders();
         responseHeaders.putAll(headers);
         newCookies = new Cookie[0];
-        this.body = ResponseBodyFactory.getInternalResourceResponseBody(status);
+        this.source = source;
     }
 
     private void initGeneralHeaders() {
@@ -67,7 +69,7 @@ public class HttpResponse {
         //TODO: Add cookie setting after implmenting custom ones
 
         sendable.append("\n");
-        sendable.append(body);
+        sendable.append(source.getResponseBody());
 
         return sendable.toString();
     }

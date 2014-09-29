@@ -1,6 +1,6 @@
 package org.mixas.webturtle.core.http.response;
 
-import org.mixas.webturtle.util.ResponseBodyFactory;
+import org.mixas.webturtle.util.ResponseBodyUtils;
 
 /**
  * @author Mikhail Stryzhonok
@@ -15,6 +15,6 @@ public class StatusResponseBodySource implements ResponseBodySource {
 
     @Override
     public String getResponseBody() {
-        return ResponseBodyFactory.getInternalResourceResponseBody(status);
+        return ResponseBodyUtils.getStatusResourceResponseBody(status);
     }
 }
