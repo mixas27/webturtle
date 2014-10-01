@@ -2,13 +2,9 @@ package org.mixas.webturtle;
 
 import org.mixas.webturtle.configuration.Configurer;
 import org.mixas.webturtle.configuration.MissingPropertyException;
-import org.mixas.webturtle.configuration.XmlScenarioParser;
-import org.mixas.webturtle.core.http.request.HttpRequest;
-import org.mixas.webturtle.core.http.response.HttpResponse;
 import org.mixas.webturtle.net.Server;
 
 import java.io.IOException;
-import java.util.Map;
 import java.util.Scanner;
 
 /**
@@ -21,8 +17,6 @@ public class WebTurtle {
     public static final String STOP_WORD = "stop";
 
     public static void main(String[] args) {
-        XmlScenarioParser parser = new XmlScenarioParser();
-        Map<HttpRequest, HttpResponse> map = parser.parse("d:/projects/own/web-turtle/example/scenario.xml");
         System.out.println("Application configuration ...");
         System.out.println("Success !");
         System.out.println("Application startup ...");

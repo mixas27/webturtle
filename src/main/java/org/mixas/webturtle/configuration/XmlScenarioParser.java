@@ -1,6 +1,5 @@
 package org.mixas.webturtle.configuration;
 
-import org.apache.log4j.Logger;
 import org.mixas.webturtle.core.http.request.HttpRequest;
 import org.mixas.webturtle.core.http.request.HttpRequestMethod;
 import org.mixas.webturtle.core.http.response.FileResponseBodySource;
@@ -13,9 +12,14 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
+import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.validation.Schema;
+import javax.xml.validation.SchemaFactory;
+import javax.xml.validation.Validator;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.HashMap;
@@ -25,7 +29,6 @@ import java.util.Map;
  * @author Mikhail Stryzhonok
  */
 public class XmlScenarioParser implements ScenarioParser {
-    private static final Logger LOGGER = Logger.getLogger(XmlScenarioParser.class);
 
     private static final String URL_NODE_NAME = "url";
     private static final String METHOD_NODE_NAME = "method";
@@ -36,6 +39,21 @@ public class XmlScenarioParser implements ScenarioParser {
 
     @Override
     public boolean isValid(String scenarioPath) {
+
+        SchemaFactory sf = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+        Schema schema;
+        try {
+            schema = sf.newSchema(getClass().getClassLoader().getResource("org/mixas/webturtle/scheme/validation.xsd"));
+        } catch (SAXException e) {
+            throw new IllegalStateException("Cannot parse XSD schema", e);
+        }
+        Validator validator = schema.newValidator();
+        DOMSource source = new DOMSource(prepareDocument(scenarioPath));
+        try {
+            validator.validate(source);
+        } catch (SAXException | IOException e ) {
+            return false;
+        }
         return true;
     }
 
@@ -62,10 +80,10 @@ public class XmlScenarioParser implements ScenarioParser {
                         }
                     }
                 }
-                System.out.println(response.getSendableForm());
                 if (response == null) {
                     response = new HttpResponse(HttpResponseStatus.INTERNAL_SERVER_ERROR);
                 }
+                System.out.println(response.getSendableForm());
                 mapping.put(request, response);
             }
         }
@@ -74,13 +92,13 @@ public class XmlScenarioParser implements ScenarioParser {
 
     private Document prepareDocument(String validScenario) {
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-        DocumentBuilder builder = null;
+        DocumentBuilder builder;
         try {
             builder = factory.newDocumentBuilder();
         } catch (ParserConfigurationException e) {
             throw new IllegalStateException("Cannot initialize XML document builder", e);
         }
-        Document document = null;
+        Document document;
         try {
             document = builder.parse(new FileInputStream(validScenario));
         } catch (SAXException e) {
