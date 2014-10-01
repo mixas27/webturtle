@@ -1,6 +1,7 @@
 package org.mixas.webturtle.configuration;
 
 import org.apache.log4j.Logger;
+import org.mixas.webturtle.core.http.ResponseMapping;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -19,6 +20,7 @@ public class Configurer {
 
     private static final Configurer INSTANCE = new Configurer();
 
+    private ScenarioParser parser = new XmlScenarioParser();
 
     public static Configurer getInstance() {
         return INSTANCE;
@@ -55,5 +57,13 @@ public class Configurer {
 
     public int getIntProperty(String key) throws MissingPropertyException{
         return Integer.parseInt(getStringProperty(key));
+    }
+
+    public ResponseMapping getResponseMapping() throws MissingPropertyException {
+        String xmlPath = getStringProperty("scenarioFile");
+        if (!parser.isValid(xmlPath)) {
+            throw new IllegalArgumentException("Invalid XML scenario format");
+        }
+        return new ResponseMapping(parser.parse(xmlPath));
     }
 }
