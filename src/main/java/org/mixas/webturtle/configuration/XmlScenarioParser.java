@@ -34,8 +34,8 @@ public class XmlScenarioParser implements ScenarioParser {
     private static final String METHOD_NODE_NAME = "method";
     private static final String RESPONSE_NODE_NAME = "response";
     private static final String SOURCE_NODE_NAME = "source";
-    private static final String FILE_TYPE = "FILE";
     private static final String MAPPING_NODE_NAME = "mapping";
+    private static final String TYPE_NODE_NAME = "type";
 
     @Override
     public boolean isValid(String scenarioPath) {
@@ -111,21 +111,35 @@ public class XmlScenarioParser implements ScenarioParser {
 
     private HttpResponse parseResponse(Element responseElement) {
         HttpResponse response = new HttpResponse();
+        BodySourceType sourceType = null;
+        String value = null;
         Node source = responseElement.getElementsByTagName(SOURCE_NODE_NAME).item(0);
         if (source.getNodeType() == Node.ELEMENT_NODE) {
             NodeList sourceParams = source.getChildNodes();
             for (int k = 0; k < sourceParams.getLength(); k++) {
                 Node sourceParam = sourceParams.item(k);
                 if (sourceParam.getNodeType() == Node.ELEMENT_NODE) {
-                    if (FILE_TYPE.equalsIgnoreCase(sourceParam.getNodeName())) {
-                        response.setSource(new FileResponseBodySource(sourceParam.getFirstChild().getNodeValue()));
+                    if (TYPE_NODE_NAME.equalsIgnoreCase(sourceParam.getNodeName())) {
+                        sourceType = BodySourceType.valueOf(sourceParam.getFirstChild().getNodeValue());
                     } else {
-                        response.setSource(new StringResponseBodySource(sourceParam.getFirstChild().getNodeValue()));
+                        value = sourceParam.getFirstChild().getNodeValue();
                     }
                 }
             }
         }
+        if (sourceType == BodySourceType.FILE) {
+            response.setSource(new FileResponseBodySource(value));
+        } else if (sourceType == BodySourceType.STRING) {
+            response.setSource(new StringResponseBodySource(value));
+        } else {
+            throw new IllegalStateException("Response cannot be parsed");
+        }
         return response;
+    }
+
+    private enum BodySourceType {
+        STRING,
+        FILE
     }
 
 }

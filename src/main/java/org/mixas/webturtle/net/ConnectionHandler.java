@@ -1,6 +1,7 @@
 package org.mixas.webturtle.net;
 
 import org.apache.log4j.Logger;
+import org.mixas.webturtle.core.http.ResponseMapping;
 import org.mixas.webturtle.core.http.request.HttpRequest;
 import org.mixas.webturtle.core.http.request.HttpRequestMethod;
 import org.mixas.webturtle.core.http.response.HttpResponse;
@@ -22,9 +23,11 @@ import java.util.Map;
 public class ConnectionHandler implements Runnable {
     private static final Logger LOGGER = Logger.getLogger(ConnectionHandler.class);
     private final Socket socket;
+    private final ResponseMapping mapping;
 
-    public ConnectionHandler(Socket socket) {
+    public ConnectionHandler(Socket socket, ResponseMapping mapping) {
         this.socket = socket;
+        this.mapping = mapping;
     }
 
     @Override
@@ -44,8 +47,13 @@ public class ConnectionHandler implements Runnable {
             if (request == null) {
                 sendResponse(new HttpResponse(HttpResponseStatus.BAD_REQUEST));
             } else {
-                sendResponse(new HttpResponse(request.getProtocolVersion(), HttpResponseStatus.OK,
-                        Collections.<String, String>emptyMap()));
+                HttpResponse response = mapping.getResponse(request);
+                if (response != null) {
+                    sendResponse(response);
+                } else {
+                    LOGGER.info("Cant found response for url");
+                    sendResponse(new HttpResponse(HttpResponseStatus.NOT_FOUND));
+                }
             }
         } catch (IOException e) {
             LOGGER.error("Error sending good response ", e);

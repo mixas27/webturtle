@@ -20,7 +20,12 @@ public class WebTurtle {
         System.out.println("Application configuration ...");
         System.out.println("Success !");
         System.out.println("Application startup ...");
-        final Server server = new Server();
+        final Server server;
+        try {
+            server = new Server(Configurer.getInstance().getResponseMapping());
+        } catch (MissingPropertyException e) {
+            throw new IllegalStateException("Xml not valid");
+        }
         try {
             server.setPort(Configurer.getInstance().getIntProperty("port"));
         } catch (MissingPropertyException e) {

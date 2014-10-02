@@ -5,8 +5,8 @@
     <method>GET</method>
     <response>
       <source>
-        <type>STRING</type>
-        <value>HELLO</value>
+        <type>FILE</type>
+        <value>D:/example.html</value>
       </source>
     </response>
     <entries>4</entries>

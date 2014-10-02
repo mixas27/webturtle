@@ -1,6 +1,7 @@
 package org.mixas.webturtle.net;
 
 import org.apache.log4j.Logger;
+import org.mixas.webturtle.core.http.ResponseMapping;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -16,13 +17,15 @@ public class Server {
     private static final int DEFAULT_PORT = 8080;
     private int port;
     private ServerSocket serverSocket;
+    private final ResponseMapping responseMapping;
 
-    public Server(int port) {
+    public Server(int port, ResponseMapping responseMapping) {
         this.port = port;
+        this.responseMapping = responseMapping;
     }
 
-    public Server() {
-        port = DEFAULT_PORT;
+    public Server(ResponseMapping responseMapping) {
+        this(DEFAULT_PORT, responseMapping);
     }
 
     public void start() throws IOException {
@@ -34,7 +37,7 @@ public class Server {
             LOGGER.debug("Accepted connection from " + aceptedSocket.getInetAddress().getHostAddress()
                     + ":" + aceptedSocket.getPort());
             SocketPool.getInstance().add(aceptedSocket);
-            Thread handlerThread = new Thread(new ConnectionHandler(aceptedSocket));
+            Thread handlerThread = new Thread(new ConnectionHandler(aceptedSocket, responseMapping));
             handlerThread.start();
         } while (!serverSocket.isClosed());
     }
