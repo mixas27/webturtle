@@ -1,5 +1,7 @@
 package org.mixas.webturtle.core.http.request;
 
+import org.mixas.webturtle.core.http.Url;
+
 import javax.servlet.http.Cookie;
 import java.util.Collections;
 import java.util.Map;
@@ -17,7 +19,7 @@ public class HttpRequest {
     private String protocolVersion;
     private Map<String, String>  headers;
     private Cookie[] cookies;
-    private String url;
+    private Url url;
 
     public HttpRequest() {
         protocolVersion = DEFAULT_PROTOCOL_VERSION;
@@ -27,7 +29,7 @@ public class HttpRequest {
 
     public HttpRequest(HttpRequestMethod method, String url, String protocolVersion, Map<String, String> headers) {
         this.method = method;
-        this.url = url;
+        this.url = new Url(url);
         this.protocolVersion = protocolVersion;
         this.headers = headers;
         initCookies();
@@ -97,7 +99,7 @@ public class HttpRequest {
     }
 
     public void setUrl(String url) {
-        this.url = url;
+        this.url = new Url(url);
     }
 
     /**
@@ -113,6 +115,6 @@ public class HttpRequest {
      * @return the request URl
      */
     protected String getUrl() {
-        return url;
+        return url.getValue();
     }
 }

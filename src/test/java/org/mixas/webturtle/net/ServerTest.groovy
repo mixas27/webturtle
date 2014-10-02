@@ -12,7 +12,7 @@ class ServerTest extends GroovyTestCase {
         server.serverSocket.bind(new InetSocketAddress(8080));
         
         server.stop();
-        
+
         assertTrue(server.stopped)
     }
 }
