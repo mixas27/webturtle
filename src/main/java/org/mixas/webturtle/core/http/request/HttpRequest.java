@@ -21,7 +21,7 @@ public class HttpRequest {
 
     public HttpRequest() {
         protocolVersion = DEFAULT_PROTOCOL_VERSION;
-        headers = Collections.<String, String>emptyMap();
+        headers = Collections.emptyMap();
         cookies = new Cookie[0];
     }
 
@@ -98,5 +98,21 @@ public class HttpRequest {
 
     public void setUrl(String url) {
         this.url = url;
+    }
+
+    /**
+     * Needed for tests
+     * @return the request method
+     */
+    protected HttpRequestMethod getMethod() {
+        return method;
+    }
+
+    /**
+     * Needed for tests
+     * @return the request URl
+     */
+    protected String getUrl() {
+        return url;
     }
 }

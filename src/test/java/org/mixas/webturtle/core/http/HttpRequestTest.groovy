@@ -1,4 +1,4 @@
-package org.mixas.webturtle.core
+package org.mixas.webturtle.core.http
 
 import org.mixas.webturtle.core.http.request.HttpRequest
 import org.mixas.webturtle.core.http.request.HttpRequestMethod

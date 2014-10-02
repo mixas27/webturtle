@@ -83,4 +83,12 @@ public class HttpResponse {
     public void setSource(ResponseBodySource source) {
         this.source = source;
     }
+
+    /**
+     * Needed for tests
+     * @return body source
+     */
+    protected ResponseBodySource getSource() {
+        return source;
+    }
 }

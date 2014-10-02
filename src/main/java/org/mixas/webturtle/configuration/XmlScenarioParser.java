@@ -22,6 +22,7 @@ import javax.xml.validation.SchemaFactory;
 import javax.xml.validation.Validator;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -36,6 +37,22 @@ public class XmlScenarioParser implements ScenarioParser {
     private static final String SOURCE_NODE_NAME = "source";
     private static final String MAPPING_NODE_NAME = "mapping";
     private static final String TYPE_NODE_NAME = "type";
+    private static final String DEFAULT_XSD_PATH = "org/mixas/webturtle/scheme/validation.xsd";
+
+    private URL xsdUrl;
+
+    public XmlScenarioParser() {
+        this(XmlScenarioParser.class.getClassLoader().getResource(DEFAULT_XSD_PATH));
+    }
+
+    /**
+     * Needed for test
+     * @param xsdUrl xsd url
+     */
+    protected XmlScenarioParser(URL xsdUrl) {
+        this.xsdUrl = xsdUrl;
+    }
+
 
     @Override
     public boolean isValid(String scenarioPath) {
@@ -43,7 +60,7 @@ public class XmlScenarioParser implements ScenarioParser {
         SchemaFactory sf = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
         Schema schema;
         try {
-            schema = sf.newSchema(getClass().getClassLoader().getResource("org/mixas/webturtle/scheme/validation.xsd"));
+            schema = sf.newSchema(xsdUrl);
         } catch (SAXException e) {
             throw new IllegalStateException("Cannot parse XSD schema", e);
         }

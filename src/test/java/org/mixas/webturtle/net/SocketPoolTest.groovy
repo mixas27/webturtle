@@ -1,5 +1,8 @@
 package org.mixas.webturtle.net
 
+import junit.framework.Assert
+import org.mixas.webturtle.net.SocketPool
+
 /**
  * @author Mikhail Stryzhonok
  */
