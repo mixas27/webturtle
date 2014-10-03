@@ -6,6 +6,10 @@
         <url>/example</url>
         <method>GET</method>
       </request>
+      <request>
+        <url>/example1</url>
+        <method>GET</method>
+      </request>
     </requests>
     <response>
       <source>

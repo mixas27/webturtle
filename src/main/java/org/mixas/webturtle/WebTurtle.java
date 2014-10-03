@@ -15,12 +15,32 @@ import java.util.Scanner;
 public class WebTurtle {
 
     public static final String STOP_WORD = "stop";
+    public static final String RESTART_KEYWORD = "restart";
+
+    private static Server server;
 
     public static void main(String[] args) {
-        System.out.println("Application configuration ...");
-        System.out.println("Success !");
+        startServer();
+        Scanner scanner = new Scanner(System.in);
+        while (true) {
+            String input = scanner.nextLine();
+            if (STOP_WORD.equalsIgnoreCase(input)) {
+                stopServer();
+                break;
+            } else if (RESTART_KEYWORD.equalsIgnoreCase(input)) {
+                restartServer();
+            }
+        }
+    }
+
+    public static void restartServer() {
+        System.out.println("Restarting application...");
+        stopServer();
+        startServer();
+    }
+
+    public static void startServer() {
         System.out.println("Application startup ...");
-        final Server server;
         try {
             server = new Server(Configurer.getInstance().getResponseMapping());
         } catch (MissingPropertyException e) {
@@ -44,17 +64,14 @@ public class WebTurtle {
         serverThread.start();
         System.out.println("Done!");
         System.out.println("Type " + STOP_WORD + " to shutdown server");
-        Scanner scanner = new Scanner(System.in);
-        while (true) {
-            String input = scanner.nextLine();
-            if (STOP_WORD.equalsIgnoreCase(input)) {
-                try {
-                    server.stop();
-                } catch (IOException e) {
-                    System.out.println("Error while stopping server!");
-                }
-                break;
-            }
+    }
+
+    public static void stopServer() {
+        System.out.println("Stopping application...");
+        try {
+            server.stop();
+        } catch (IOException e) {
+            System.out.println("Error while stopping server!");
         }
     }
 }

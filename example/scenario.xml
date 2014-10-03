@@ -13,8 +13,8 @@
       </requests>
       <response>
         <source>
-          <type>STRING</type>
-          <value>test string</value>
+          <type>FILE</type>
+          <value>d:/example.html</value>
         </source>
       </response>
       <entries>4</entries>
