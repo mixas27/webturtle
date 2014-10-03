@@ -1,19 +1,12 @@
 <application>
 <mappings>
   <mapping>
-    <url>/example</url>
-    <method>GET</method>
-    <response>
-      <source>
-        <type>STRING</type>
-        <value>test string</value>
-      </source>
-    </response>
-    <entries>4</entries>
-  </mapping>
-  <mapping>
-    <url>/example1</url>
-    <method>GET</method>
+    <requests>
+      <request>
+        <url>/example</url>
+        <method>GET</method>
+      </request>
+    </requests>
     <response>
       <source>
         <type>STRING</type>

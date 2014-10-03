@@ -24,7 +24,9 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.URL;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * @author Mikhail Stryzhonok
@@ -37,6 +39,8 @@ public class XmlScenarioParser implements ScenarioParser {
     private static final String SOURCE_NODE_NAME = "source";
     private static final String MAPPING_NODE_NAME = "mapping";
     private static final String TYPE_NODE_NAME = "type";
+    private static final String REQUESTS_NODE_NAME = "requests";
+    private static final String REQUEST_NODE_NAME = "request";
     private static final String DEFAULT_XSD_PATH = "org/mixas/webturtle/scheme/validation.xsd";
 
     private URL xsdUrl;
@@ -83,15 +87,13 @@ public class XmlScenarioParser implements ScenarioParser {
             Node mappingNode = nodeList.item(i);
             if (mappingNode.getNodeType() == Node.ELEMENT_NODE) {
                 NodeList entries = mappingNode.getChildNodes();
-                HttpRequest request = new HttpRequest();
+                Set<HttpRequest> requests = new HashSet<>();
                 HttpResponse response = null;
                 for (int j = 0; j < entries.getLength(); j++) {
                     Node entry = entries.item(j);
                     if (entry.getNodeType() == Node.ELEMENT_NODE) {
-                        if (URL_NODE_NAME.equalsIgnoreCase(entry.getNodeName())) {
-                            request.setUrl(entry.getFirstChild().getNodeValue());
-                        } else if (METHOD_NODE_NAME.equalsIgnoreCase(entry.getNodeName())) {
-                            request.setMethod(HttpRequestMethod.valueOf(entry.getFirstChild().getNodeValue()));
+                        if (REQUESTS_NODE_NAME.equalsIgnoreCase(entry.getNodeName())) {
+                            requests.addAll(parseRequests(entry));
                         } else if (RESPONSE_NODE_NAME.equalsIgnoreCase(entry.getNodeName())) {
                             response = parseResponse((Element) entry);
                         }
@@ -101,7 +103,9 @@ public class XmlScenarioParser implements ScenarioParser {
                     response = new HttpResponse(HttpResponseStatus.INTERNAL_SERVER_ERROR);
                 }
                 System.out.println(response.getSendableForm());
-                mapping.put(request, response);
+                for (HttpRequest request : requests) {
+                    mapping.put(request, response);
+                }
             }
         }
         return mapping;
@@ -124,6 +128,30 @@ public class XmlScenarioParser implements ScenarioParser {
             throw new IllegalArgumentException("Cannot open configuration file", e);
         }
         return document;
+    }
+
+    private Set<HttpRequest> parseRequests(Node requestsNode) {
+        NodeList requests = requestsNode.getChildNodes();
+        Set<HttpRequest> result = new HashSet<>();
+        for (int i = 0; i < requests.getLength(); i ++) {
+            Node request = requests.item(i);
+            if (request.getNodeType() == Node.ELEMENT_NODE) {
+                NodeList requestAttributes = request.getChildNodes();
+                HttpRequest httpRequest = new HttpRequest();
+                for (int j = 0; j < requestAttributes.getLength(); j ++) {
+                    Node attribute = requestAttributes.item(j);
+                    if (attribute.getNodeType() == Node.ELEMENT_NODE) {
+                        if (URL_NODE_NAME.equalsIgnoreCase(attribute.getNodeName())) {
+                            httpRequest.setUrl(attribute.getFirstChild().getNodeValue());
+                        } else if (METHOD_NODE_NAME.equalsIgnoreCase(attribute.getNodeName())) {
+                            httpRequest.setMethod(HttpRequestMethod.valueOf(attribute.getFirstChild().getNodeValue()));
+                        }
+                    }
+                }
+                result.add(httpRequest);
+            }
+        }
+        return result;
     }
 
     private HttpResponse parseResponse(Element responseElement) {

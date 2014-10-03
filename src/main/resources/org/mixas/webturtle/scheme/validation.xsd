@@ -9,21 +9,33 @@
               <xs:element name="mapping" maxOccurs="unbounded">
                 <xs:complexType>
                   <xs:sequence>
-                    <xs:element name="url" type="xs:string"/>
-                    <xs:element name="method">
-                      <xs:simpleType>
-                        <xs:restriction base="xs:string">
-                          <xs:enumeration value="OPTIONS"/>
-                          <xs:enumeration value="GET"/>
-                          <xs:enumeration value="HEAD"/>
-                          <xs:enumeration value="POST"/>
-                          <xs:enumeration value="PUT"/>
-                          <xs:enumeration value="DELETE"/>
-                          <xs:enumeration value="TRACE"/>
-                          <xs:enumeration value="CONNECT"/>
-                          <xs:enumeration value="PATH"/>
-                        </xs:restriction>
-                      </xs:simpleType>
+                    <xs:element name="requests">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:element name="request" minOccurs="1" maxOccurs="unbounded">
+                            <xs:complexType>
+                              <xs:sequence>
+                                <xs:element name="url" type="xs:string"/>
+                                <xs:element name="method">
+                                  <xs:simpleType>
+                                    <xs:restriction base="xs:string">
+                                      <xs:enumeration value="OPTIONS"/>
+                                      <xs:enumeration value="GET"/>
+                                      <xs:enumeration value="HEAD"/>
+                                      <xs:enumeration value="POST"/>
+                                      <xs:enumeration value="PUT"/>
+                                      <xs:enumeration value="DELETE"/>
+                                      <xs:enumeration value="TRACE"/>
+                                      <xs:enumeration value="CONNECT"/>
+                                      <xs:enumeration value="PATH"/>
+                                    </xs:restriction>
+                                  </xs:simpleType>
+                                </xs:element>
+                              </xs:sequence>
+                            </xs:complexType>
+                          </xs:element>
+                        </xs:sequence>
+                      </xs:complexType>
                     </xs:element>
                     <xs:element name="response" minOccurs="0">
                       <xs:complexType>
@@ -37,9 +49,9 @@
                                       <xs:enumeration value="STRING"/>
                                       <xs:enumeration value="FILE"/>
                                     </xs:restriction>
-                            </xs:simpleType>
-                          </xs:element>
-                          <xs:element name="value" type="xs:string"/>
+                                  </xs:simpleType>
+                                </xs:element>
+                                <xs:element name="value" type="xs:string"/>
                               </xs:sequence>
                             </xs:complexType>
                           </xs:element>
