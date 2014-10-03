@@ -2,11 +2,13 @@ package org.mixas.webturtle.net;
 
 import org.apache.log4j.Logger;
 import org.mixas.webturtle.core.http.ResponseMapping;
+import org.mixas.webturtle.core.http.request.HttpRequest;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.Map;
 
 /**
  * @author Mikhail Stryzhonok
@@ -48,6 +50,14 @@ public class Server {
         }
         SocketPool.getInstance().clearPool();
         LOGGER.debug("Server stopped");
+    }
+
+    public void printRequestStatistic() {
+        Map<HttpRequest, Integer> stats = responseMapping.getAllStatistic();
+        for (Map.Entry<HttpRequest, Integer> entry : stats.entrySet()) {
+            System.out.println("Url " + entry.getKey().getUrl() + " accessed " + entry.getValue()
+                    + " times with method " + entry.getKey().getMethod());
+        }
     }
 
     public boolean isStopped() {

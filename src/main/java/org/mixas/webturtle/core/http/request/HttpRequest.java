@@ -106,7 +106,7 @@ public class HttpRequest {
      * Needed for tests
      * @return the request method
      */
-    protected HttpRequestMethod getMethod() {
+    public HttpRequestMethod getMethod() {
         return method;
     }
 
@@ -114,7 +114,7 @@ public class HttpRequest {
      * Needed for tests
      * @return the request URl
      */
-    protected String getUrl() {
+    public String getUrl() {
         return url.getValue();
     }
 }

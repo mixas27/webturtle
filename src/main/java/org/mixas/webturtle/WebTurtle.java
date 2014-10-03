@@ -70,6 +70,7 @@ public class WebTurtle {
         System.out.println("Stopping application...");
         try {
             server.stop();
+            server.printRequestStatistic();
         } catch (IOException e) {
             System.out.println("Error while stopping server!");
         }
